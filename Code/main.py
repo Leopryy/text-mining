@@ -1,6 +1,9 @@
 import urllib.request
 import string
 from thefuzz import fuzz
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import nltk
+nltk.download('vader_lexicon')
 
 def import_text(url):
     """This Function read in the text from the url"""
@@ -9,9 +12,9 @@ def import_text(url):
     text = data.decode('utf-8')
     return text
 
-# def get_a_score(text):
-#     score = SentimentIntensityAnalyzer().polarity_scores(text)
-#     return score
+def get_a_score(text):
+    score = SentimentIntensityAnalyzer().polarity_scores(text)
+    return score
 
 def get_word_num(url,skip_header):
     """This function break up the text and count each word and insert it into
@@ -79,9 +82,9 @@ def print_top_10(name,content):
         print(item[0],item[1])
 
 def compare_text(text1,text2):
-    print(fuzz.ratio(text1,text2))
-    print(fuzz.token_sort_ratio(text1,text2))
-    print(fuzz.token_set_ratio(text1,text2))
+    print("The similarity of the two books: ", fuzz.ratio(text1,text2))
+    print("The similarity of the two sorted books: ", fuzz.token_sort_ratio(text1,text2))
+    print("The similarity of the two set books: ", fuzz.token_set_ratio(text1,text2))
 
 def skip_gutenberg_header(text):
     """Reads from text until it finds the line that ends the header.
@@ -96,8 +99,8 @@ def main():
     url2 = 'https://www.gutenberg.org/files/76/76-0.txt'
     text1 = import_text(url1)
     text2 = import_text(url2)
-    # print("The score for text1 is:", get_a_score(text1))
-    # print("The score for text1 is:", get_a_score(text1))
+    print("The score for text1 is:", get_a_score(text1))
+    print("The score for text2 is:", get_a_score(text2))
     d1 = get_word_num(url1,skip_header=True)
     d2 = get_word_num(url2,skip_header=True)
     filename = 'data/stopwords.txt'
